@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Torri Mei · Competitive Swimmer</title>
+<meta name="description" content="Torri Mei, competitive swimmer. Race footage, photos and the official YouTube channel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,700;1,800;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#020a14; --deep:#04182c; --panel:#0a2b4a; --rule:rgba(255,255,255,.13);
+  --water:#00c8ff; --amber:#00c8ff; --paper:#f3f5f7; --text:#06121f; --muted:#56646f;
+  --red:#ff2d3d; --lime:#d6ff5a;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:#fff;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:1rem;letter-spacing:.1em;text-transform:uppercase}
+.display{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.01em}
+.h2{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-weight:900;text-transform:uppercase;line-height:.9;font-size:clamp(2.8rem,8vw,5.5rem);text-wrap:balance}
+.h2::after{content:"";display:block;width:64px;height:4px;margin-top:16px;background:var(--water)}
+
+/* lane rope: red, white and blue floats sliding along the line */
+.rope{height:4px;background:var(--ink) repeating-linear-gradient(90deg,var(--water) 0 40px,transparent 40px 52px);background-size:104px 100%;animation:rope 2.4s linear infinite}
+@keyframes rope{to{background-position:104px 0}}
+
+.progress{position:fixed;top:0;left:0;height:4px;width:100%;background:var(--amber);transform-origin:0 50%;transform:scaleX(0);z-index:30}
+
+/* nav */
+nav{position:fixed;top:3px;left:0;right:0;z-index:20;transition:background .3s,backdrop-filter .3s}
+nav.solid{background:rgba(2,10,20,.88);backdrop-filter:blur(12px)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:14px}
+.brand{font-family:"Barlow Condensed";font-style:italic;font-weight:900;text-transform:uppercase;font-size:1.6rem}
+.brand i{color:var(--water)}
+nav ul{display:flex;gap:26px;list-style:none;padding:0}
+nav ul a{opacity:.7;transition:opacity .2s}
+nav ul a:hover{opacity:1}
+@media(max-width:700px){nav ul{display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;font-family:"Barlow Condensed";font-weight:700;font-size:1.15rem;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;position:relative;overflow:hidden;transition:transform .25s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s var(--ease)}
+.btn:hover::after{transform:translateX(120%)}
+.btn-yt{background:var(--red);color:#fff}
+.btn-line{border:1.5px solid rgba(255,255,255,.55)}
+.btn-sm{padding:7px 14px;font-size:1rem}
+.tri{width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink)}
+.hero-bg{position:absolute;inset:-40px;background:url(https://i.ytimg.com/vi/MpwXIB4_KGk/oar3.jpg) center 70%/cover;filter:blur(16px) saturate(.7) contrast(1.1);animation:kb 24s ease-in-out infinite alternate}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,10,20,.96) 0%,rgba(2,16,34,.82) 45%,rgba(3,40,80,.55) 100%),linear-gradient(0deg,var(--ink) 0%,transparent 35%)}
+@keyframes kb{from{transform:scale(1.05)}to{transform:scale(1.2) translate(-2%,-2%)}}
+/* drifting light, like sun through pool water */
+.caustics{position:absolute;inset:-20%;opacity:.35;filter:blur(50px);mix-blend-mode:screen;
+  background:
+    radial-gradient(40% 30% at 20% 30%,rgba(0,200,255,.45),transparent 70%),
+    radial-gradient(35% 28% at 75% 20%,rgba(0,110,220,.5),transparent 70%),
+    radial-gradient(45% 35% at 60% 80%,rgba(0,200,255,.3),transparent 70%);
+  animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(6%,-5%,0) rotate(8deg) scale(1.12)}}
+/* lane lines draw in */
+.lanes{position:absolute;inset:0;display:grid;grid-template-rows:repeat(6,1fr);pointer-events:none}
+.lanes span{border-top:1px solid rgba(255,255,255,.09);transform:scaleX(0);transform-origin:0 50%;animation:draw 1.6s var(--ease) forwards}
+.lanes span:nth-child(2){animation-delay:.1s}.lanes span:nth-child(3){animation-delay:.2s}.lanes span:nth-child(4){animation-delay:.3s}.lanes span:nth-child(5){animation-delay:.4s}.lanes span:nth-child(6){animation-delay:.5s}
+@keyframes draw{to{transform:scaleX(1)}}
+.hero .wrap{position:relative;width:100%;display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:end;padding-top:110px;padding-bottom:64px}
+.hero h1{font-size:clamp(5rem,17vw,13rem)}
+.hero h1 span{display:block;overflow:hidden;padding-right:.12em}
+.hero h1 b{display:block;font-weight:inherit;transform:translateY(105%);animation:rise 1s var(--ease) forwards}
+.hero h1 span:nth-child(2) b{animation-delay:.12s;color:transparent;-webkit-text-stroke:2px var(--water)}
+@keyframes rise{to{transform:none}}
+.fade{opacity:0;animation:fadeup .9s var(--ease) .5s forwards}
+.fade.d2{animation-delay:.7s}.fade.d3{animation-delay:.9s}
+@keyframes fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.kicker{color:var(--water);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--amber);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(0,200,255,0)}0%{box-shadow:0 0 0 0 rgba(0,200,255,.7)}}
+.lede{max-width:44ch;font-size:1.08rem;color:#c3d2df;margin:22px 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+
+/* hero collage */
+.collage{position:relative;height:min(64vh,560px);min-height:380px}
+.collage figure{position:absolute;overflow:hidden;border-radius:3px;box-shadow:0 30px 70px rgba(0,0,0,.6);clip-path:inset(100% 0 0 0);animation:wipe 1.1s var(--ease) forwards;will-change:transform}
+.collage img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);animation:settle 1.8s var(--ease) forwards}
+.collage figcaption{position:absolute;left:10px;bottom:10px;background:var(--ink);color:#fff;padding:2px 10px;border-left:3px solid var(--water)}
+.c1{right:0;top:0;width:58%;height:78%;animation-delay:.35s!important}
+.c2{left:0;bottom:0;width:48%;height:58%;animation-delay:.55s!important}
+.c3{right:6%;bottom:-4%;width:34%;height:36%;animation-delay:.75s!important}
+@keyframes wipe{to{clip-path:inset(0)}}
+@keyframes settle{to{transform:scale(1)}}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.collage{order:-1;height:46vh;min-height:300px}}
+
+/* ticker */
+.ticker{background:var(--water);color:var(--ink);overflow:hidden;white-space:nowrap;padding:12px 0}
+.ticker div{display:inline-block;animation:slide 28s linear infinite;font-family:'Barlow Condensed';font-style:italic;font-weight:900;text-transform:uppercase;font-size:1.5rem}
+.ticker span{margin:0 22px}.ticker span::after{content:"/";margin-left:44px;opacity:.45}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* scoreboard */
+.board{background:var(--ink)}
+.board .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.cell{padding:34px 20px;border-left:1px solid var(--rule)}
+.cell:first-child{border-left:0;padding-left:0}
+.cell b{display:block;font-family:"Barlow Condensed";font-style:italic;font-weight:900;font-size:clamp(3rem,7vw,5rem);color:#fff;font-variant-numeric:tabular-nums;line-height:.9}
+.cell span{color:#7f93a5;display:block;margin-top:8px}
+@media(max-width:700px){.board .wrap{grid-template-columns:1fr 1fr}.cell{padding:24px 14px}.cell:nth-child(3){border-left:0;padding-left:0}.cell:nth-child(n+3){border-top:1px solid var(--rule)}}
+
+section{padding:110px 0;position:relative}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:44px}
+.sec-head p{max-width:40ch;color:#9db0c1}
+.label{color:var(--water);display:block;margin-bottom:14px}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+
+#races{background:linear-gradient(180deg,var(--ink),var(--deep))}
+/* heat sheet */
+.heat{border-top:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:70px 1fr auto 300px;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule);position:relative;transition:padding .4s var(--ease)}
+.row::before{content:"";position:absolute;inset:0 -20px;background:linear-gradient(90deg,rgba(0,200,255,.16),transparent);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--ease)}
+.row:hover::before{transform:scaleX(1)}
+.row:hover{padding-left:14px}
+.row>*{position:relative}
+.row .n{color:transparent;-webkit-text-stroke:1px var(--water);font-style:italic;font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:0}
+.row h3{font-family:"Barlow Condensed";font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(2rem,5vw,3.6rem);line-height:.9}
+.row .v{color:#9db0c1;text-align:right}
+.row .live{color:var(--amber);display:block;margin-bottom:6px}
+.frames{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.frames div{aspect-ratio:3/4;overflow:hidden;border-radius:4px;background:var(--panel)}
+.frames img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) contrast(1.05);transition:transform .7s var(--ease),filter .4s}
+.row:hover .frames img{transform:scale(1.1);filter:none}
+.row:hover .frames div:nth-child(2) img{transition-delay:.06s}.row:hover .frames div:nth-child(3) img{transition-delay:.12s}
+@media(max-width:860px){.row{grid-template-columns:36px 1fr;gap:12px}.row .v{text-align:left;grid-column:2}.frames{grid-column:1/-1}}
+
+/* gallery filmstrips */
+.gallery{background:var(--paper);color:var(--text);overflow:hidden}
+.gallery .sec-head p{color:var(--muted)}
+.gallery .label{color:#0077b3}
+.strip{display:flex;gap:14px;width:max-content;animation:slide 70s linear infinite;margin-bottom:14px}
+.strip.rev{animation-direction:reverse;animation-duration:85s}
+.strip:hover{animation-play-state:paused}
+.shot{flex:none;width:clamp(170px,19vw,250px);aspect-ratio:3/4;border-radius:2px;overflow:hidden;position:relative;background:#cfd6dc}
+.strip.rev .shot{aspect-ratio:1}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.shot:hover img{transform:scale(1.08)}
+.shot span{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 10px;color:#fff;background:linear-gradient(transparent,rgba(2,29,58,.9));opacity:0;transform:translateY(8px);transition:.35s var(--ease)}
+.shot:hover span{opacity:1;transform:none}
+
+.channel{background:linear-gradient(180deg,var(--deep),var(--ink))}
+/* channel */
+.channel .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.channel p{color:#b3c2cf;max-width:44ch;margin:20px 0 6px}
+.channel ul{list-style:none;padding:0;margin:26px 0 30px}
+.channel li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--rule)}
+.channel li:last-child{border-bottom:1px solid var(--rule)}
+.channel li span{color:var(--water)}
+.deck{position:relative;height:520px}
+.card{position:absolute;top:50%;left:50%;width:250px;aspect-ratio:9/16;margin:-222px 0 0 -125px;border-radius:8px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.6);transition:transform .9s var(--ease),opacity .9s var(--ease),filter .9s;background:var(--panel)}
+.card img{width:100%;height:100%;object-fit:cover}
+.card[data-p="0"]{transform:translateX(0) rotate(0) scale(1);z-index:3}
+.card[data-p="1"]{transform:translateX(46%) rotate(7deg) scale(.86);z-index:2;filter:brightness(.6)}
+.card[data-p="2"]{transform:translateX(-46%) rotate(-7deg) scale(.86);z-index:2;filter:brightness(.6)}
+.card[data-p="3"]{transform:scale(.7);opacity:0;z-index:1}
+.playbadge{position:absolute;left:50%;top:50%;z-index:4;width:66px;height:66px;margin:-33px;border-radius:50%;background:var(--red);display:grid;place-items:center;pointer-events:none;animation:pulse-red 2s infinite}
+@keyframes pulse-red{0%{box-shadow:0 0 0 0 rgba(255,45,61,.6)}70%{box-shadow:0 0 0 22px rgba(255,45,61,0)}100%{box-shadow:0 0 0 0 rgba(255,45,61,0)}}
+@media(max-width:860px){.channel .wrap{grid-template-columns:1fr}.deck{height:440px}.card{width:200px;margin:-178px 0 0 -100px}}
+
+/* axol */
+.axol{background:#0a0a0c;padding-top:90px}
+.axol-card{border:1px solid #232327;background:#111114;border-radius:20px;padding:clamp(28px,6vw,60px);display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.axol-card::before{content:"";position:absolute;width:420px;height:420px;right:-120px;top:-160px;background:radial-gradient(circle,rgba(214,255,90,.16),transparent 65%);animation:drift 12s ease-in-out infinite alternate}
+.axol-card>*{position:relative}
+.partner{color:#9a9aa2;margin-bottom:20px;display:block}
+.axol-logo{display:flex;align-items:center;gap:12px;font-weight:600;font-size:2rem;letter-spacing:-.03em}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--lime);animation:glow 2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 26px 4px var(--lime)}0%,100%{box-shadow:0 0 10px var(--lime)}}
+.axol h2{font-weight:600;letter-spacing:-.03em;font-size:clamp(1.9rem,4.6vw,3rem);line-height:1.05;margin:20px 0 14px}
+.axol p{color:#a5a5ad;max-width:46ch}
+.btn-axol{background:var(--lime);color:#0a0a0c;border-radius:999px;margin-top:26px;transform:none;font-family:Inter;text-transform:none;letter-spacing:0;font-size:.95rem;font-weight:600}
+.btn-axol:hover{transform:translateY(-2px)}
+.feedbox{height:300px;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+.feed{display:grid;gap:10px;animation:feed 14s linear infinite}
+@keyframes feed{to{transform:translateY(-50%)}}
+.clip{display:flex;align-items:center;gap:12px;background:#18181c;border:1px solid #26262b;border-radius:12px;padding:10px;font-size:.88rem;color:#d5d5da}
+.clip img{width:42px;height:56px;border-radius:7px;object-fit:cover;flex:none}
+.clip small{display:block;color:#77777f}
+.clip em{margin-left:auto;font-style:normal;color:var(--lime);font-size:.75rem;font-weight:600}
+@media(max-width:860px){.axol-card{grid-template-columns:1fr}}
+
+footer{padding:44px 0 0;color:#7f93a5;background:var(--ink)}
+footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+footer a{color:#fff}
+.big{font-size:clamp(3rem,15vw,12rem);color:transparent;-webkit-text-stroke:1px rgba(0,200,255,.3);text-align:center;padding:30px 0 0;white-space:nowrap;overflow:hidden}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv,.fade{opacity:1;transform:none}.hero h1 b{transform:none}.collage figure{clip-path:none}.collage img{transform:none}.lanes span{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Torri<i>Mei</i></a>
+    <ul class="mono">
+      <li><a href="#races">Races</a></li>
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#channel">Channel</a></li>
+      <li><a href="#axol">Axol</a></li>
+    </ul>
+    <a class="btn btn-yt btn-sm" href="https://www.youtube.com/@Torrifly432?sub_confirmation=1" target="_blank" rel="noopener"><span class="tri"></span>Subscribe</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="caustics"></div>
+  <div class="lanes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="wrap">
+    <div>
+      <div class="mono kicker fade">Competitive swimmer · Butterfly &amp; distance free</div>
+      <h1 class="display"><span><b>Torri</b></span><span><b>Mei</b></span></h1>
+      <p class="lede fade d2">Butterfly. Distance free. Every race on film.</p>
+      <div class="cta fade d3">
+        <a class="btn btn-yt" href="https://www.youtube.com/@Torrifly432?sub_confirmation=1" target="_blank" rel="noopener"><span class="tri"></span>Subscribe on YouTube</a>
+        <a class="btn btn-line" href="#races">View recent races</a>
+      </div>
+    </div>
+    <div class="collage" id="collage">
+      <figure class="c1" data-speed="-0.06"><img alt="Torri Mei" referrerpolicy="no-referrer" src="https://yt3.googleusercontent.com/10HVDjSgNmZUP42YCx06PvePdrWQj9Tz_dzmoawRRiHV1FTyNiPI9aogJFPuJz7X7NpggsAdaI0=s800-c-k-c0x00ffffff-no-rj"></figure>
+      <figure class="c2" data-speed="0.08"><img alt="50 Fly race" src="https://i.ytimg.com/vi/MpwXIB4_KGk/oar1.jpg"><figcaption class="mono">50 Fly</figcaption></figure>
+      <figure class="c3" data-speed="0.16"><img alt="100 Fly finals" src="https://i.ytimg.com/vi/MGOGJYFF1Uw/oar3.jpg"><figcaption class="mono">100 Fly</figcaption></figure>
+    </div>
+  </div>
+</header>
+
+<div class="rope"></div>
+<div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+
+<div class="board">
+  <div class="wrap">
+    <div class="cell"><b data-count="17">0</b><span class="mono">Videos published</span></div>
+    <div class="cell"><b data-count="1.3" data-suffix="K" data-dec="1">0</b><span class="mono">Views, top video</span></div>
+    <div class="cell"><b data-count="5">0</b><span class="mono">Race videos</span></div>
+    <div class="cell"><b data-count="25">0</b><span class="mono">Subscribers</span></div>
+  </div>
+</div>
+
+<section id="races">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="mono label">Competition</span><h2 class="h2">Recent races</h2></div>
+      <p>Race footage from recent meets. Select an event to watch the swim.</p>
+    </div>
+    <div class="heat" id="heat"></div>
+  </div>
+</section>
+
+<div class="rope"></div>
+<section class="gallery" id="photos">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="mono label">Gallery</span><h2 class="h2">Photos</h2></div>
+      <p>Moments from meets, training and everyday life. Hover to pause.</p>
+    </div>
+  </div>
+  <div class="strip" id="strip1"></div>
+  <div class="strip rev" id="strip2"></div>
+</section>
+
+<div class="rope"></div>
+<section class="channel" id="channel">
+  <div class="wrap">
+    <div class="rv">
+      <span class="mono label">YouTube · @Torrifly432</span>
+      <h2 class="h2">Watch every race</h2>
+      <p>Short-form videos covering competition and life outside the pool.</p>
+      <ul>
+        <li><strong>Race footage</strong><span class="mono">50 Fly · 100 Fly · 500 Free</span></li>
+        <li><strong>Get ready with me</strong><span class="mono">School · Meet day</span></li>
+        <li><strong>Swim life</strong><span class="mono">Behind the scenes</span></li>
+      </ul>
+      <a class="btn btn-yt" href="https://www.youtube.com/@Torrifly432?sub_confirmation=1" target="_blank" rel="noopener"><span class="tri"></span>Subscribe to the channel</a>
+    </div>
+    <a class="deck rv" id="deck" style="--d:.15s" href="https://www.youtube.com/@Torrifly432" target="_blank" rel="noopener" aria-label="Open the Torri Mei YouTube channel">
+      <span class="playbadge"><span class="tri"></span></span>
+    </a>
+  </div>
+</section>
+
+<section class="axol" id="axol">
+  <div class="wrap">
+    <div class="axol-card rv">
+      <div>
+        <span class="mono partner">Partner</span>
+        <div class="axol-logo"><span class="dot"></span>axol</div>
+        <h2>A feed that's only for you.</h2>
+        <p>Every clip is picked by AI from YouTube Shorts, TikTok and Reels. It learns from how long you actually watch, not what you say you like.</p>
+        <a class="btn btn-axol" href="https://axol-app.netlify.app" target="_blank" rel="noopener">Create my feed</a>
+      </div>
+      <div class="feedbox" aria-hidden="true"><div class="feed" id="feed"></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">© 2026 Torri Mei</span>
+    <span class="mono"><a href="https://www.youtube.com/@Torrifly432" target="_blank" rel="noopener">YouTube</a> &nbsp;·&nbsp; <a href="https://axol-app.netlify.app" target="_blank" rel="noopener">Axol</a></span>
+  </div>
+  <div class="display big" aria-hidden="true">Torri Mei</div>
+</footer>
+
+<script>
+const races = [
+  {id:"MpwXIB4_KGk", event:"50 Butterfly", views:"1.2K views", latest:true},
+  {id:"MGOGJYFF1Uw", event:"100 Butterfly Finals", views:"1.1K views"},
+  {id:"mn4a8fdMe50", event:"500 Freestyle", views:"1K views"},
+  {id:"gSulTfsneC0", event:"Freestyle progression", views:"1.3K views"},
+  {id:"-jfg_yjXeIY", event:"August 21 meet", views:"1.2K views"}
+];
+const life = [
+  {id:"NTigwzZsc3A", t:"November 8, 2026"},
+  {id:"4OxbhMehMl4", t:"Get ready with me: school"},
+  {id:"g8AilqVpHns", t:"November 8, 2026"},
+  {id:"bX726HML67w", t:"Get ready with me: beach club"},
+  {id:"pgUAFy6KAmY", t:"With friends"},
+  {id:"Csbzh4-fJJU", t:"October 26, 2026"},
+  {id:"JNZbmkjQ7Wo", t:"Behind the scenes"},
+  {id:"urqUgS48sDo", t:"School days"},
+  {id:"0hefQ5v5Hhs", t:"Training"},
+  {id:"3ycSGT60jGE", t:"Training"},
+  {id:"vcCEXqjDPeU", t:"Off the clock"}
+];
+const url = id => `https://www.youtube.com/shorts/${id}`;
+// each Short exposes three vertical frames (oar1-3); fall back to the standard thumbnail
+const img = (id, f, alt) => `<img loading="lazy" alt="${alt}" src="https://i.ytimg.com/vi/${id}/oar${f}.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${id}/hqdefault.jpg'">`;
+const $ = id => document.getElementById(id);
+
+// ticker
+const words = ["50 Butterfly","100 Butterfly Finals","500 Freestyle","Take your mark","Race day","Subscribe on YouTube"];
+$("ticker").innerHTML = [...words,...words,...words,...words].map(w=>`<span>${w}</span>`).join("");
+
+// heat sheet
+$("heat").innerHTML = races.map((r,i)=>`
+  <a class="row rv" style="--d:${i*.07}s" href="${url(r.id)}" target="_blank" rel="noopener">
+    <span class="mono n">${i+1}</span>
+    <h3>${r.event}</h3>
+    <span class="mono v">${r.latest?'<span class="live">● Latest</span>':''}${r.views} &nbsp;→</span>
+    <span class="frames">${[1,2,3].map(f=>`<div>${img(r.id,f,r.event)}</div>`).join("")}</span>
+  </a>`).join("");
+
+// gallery: two filmstrips running in opposite directions, content doubled for a seamless loop
+const all = [...life, ...races.map(r=>({id:r.id,t:r.event}))];
+const shot = (p,f) => `<a class="shot" href="${url(p.id)}" target="_blank" rel="noopener">${img(p.id,f,p.t)}<span class="mono">${p.t}</span></a>`;
+const s1 = all.map((p,i)=>shot(p, i%2?1:2)).join("");
+const s2 = [...all].reverse().map((p,i)=>shot(p, i%2?3:1)).join("");
+$("strip1").innerHTML = s1+s1;
+$("strip2").innerHTML = s2+s2;
+
+// channel deck: rotating stack
+const deckIds = ["MpwXIB4_KGk","4OxbhMehMl4","mn4a8fdMe50","bX726HML67w","MGOGJYFF1Uw","pgUAFy6KAmY"];
+$("deck").insertAdjacentHTML("afterbegin", deckIds.map((id,i)=>`<div class="card" data-p="${Math.min(i,3)}">${img(id,2,"Channel video")}</div>`).join(""));
+const cards = [...document.querySelectorAll(".card")]; let turn = 0;
+const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+if(!reduce) setInterval(()=>{ turn++; cards.forEach((c,i)=>{ const p=((i-turn)%cards.length+cards.length)%cards.length; c.dataset.p = p===0?0 : p===1?1 : p===cards.length-1?2 : 3; }); }, 2600);
+
+// axol feed
+const clips = [["MpwXIB4_KGk","50 Butterfly","Shorts"],["4OxbhMehMl4","Get ready with me","Shorts"],["mn4a8fdMe50","500 Freestyle","Shorts"],["pgUAFy6KAmY","With friends","Shorts"],["MGOGJYFF1Uw","100 Butterfly Finals","Shorts"]];
+const feed = clips.map((c,i)=>`<div class="clip">${img(c[0],1,"")}<div>${c[1]}<small>Picked for you · ${c[2]}</small></div><em>${96-i*3}% match</em></div>`).join("");
+$("feed").innerHTML = feed+feed;
+
+// reveal + count-up
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.15});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+const cio = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return; cio.unobserve(e.target);
+  const el=e.target, end=+el.dataset.count, dec=+(el.dataset.dec||0), suf=el.dataset.suffix||"", t0=performance.now();
+  if(reduce){ el.textContent=end.toFixed(dec)+suf; return; }
+  (function tick(t){ const k=Math.min(1,(t-t0)/1400), v=end*(1-Math.pow(1-k,3)); el.textContent=v.toFixed(dec)+suf; if(k<1) requestAnimationFrame(tick); })(t0);
+}),{threshold:.6});
+document.querySelectorAll("[data-count]").forEach(el=>cio.observe(el));
+
+// scroll: progress line, nav background, collage parallax
+const figs=[...document.querySelectorAll("#collage figure")];
+addEventListener("scroll",()=>{
+  const y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+  $("progress").style.transform=`scaleX(${h?y/h:0})`;
+  $("nav").classList.toggle("solid", y>40);
+  if(!reduce && y<innerHeight) figs.forEach(f=>f.style.transform=`translateY(${y*f.dataset.speed}px)`);
+},{passive:true});
+</script>
+</body>
+</html>
