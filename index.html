@@ -259,6 +259,7 @@ footer a{color:#fff}
       <div class="cta fade d3">
         <a class="btn btn-yt" href="https://www.youtube.com/@Torrifly432?sub_confirmation=1" target="_blank" rel="noopener"><span class="tri"></span>Subscribe on YouTube</a>
         <a class="btn btn-line" href="#races">View recent races</a>
+        <button class="btn btn-line" id="share" type="button" style="background:none;color:#fff;cursor:pointer">Share</button>
       </div>
     </div>
     <div class="collage" id="collage">
@@ -413,6 +414,12 @@ if(!reduce) setInterval(()=>{ turn++; cards.forEach((c,i)=>{ const p=((i-turn)%c
 const clips = [["MpwXIB4_KGk","50 Butterfly","Shorts"],["4OxbhMehMl4","Get ready with me","Shorts"],["mn4a8fdMe50","500 Freestyle","Shorts"],["pgUAFy6KAmY","With friends","Shorts"],["MGOGJYFF1Uw","100 Butterfly Finals","Shorts"]];
 const feed = clips.map((c,i)=>`<div class="clip">${img(c[0],1,"")}<div>${c[1]}<small>Picked for you · ${c[2]}</small></div><em>${96-i*3}% match</em></div>`).join("");
 $("feed").innerHTML = feed+feed;
+
+// share: native share sheet where available, otherwise copy the link
+$("share").addEventListener("click", async e => {
+  const data = {title:"Audry Schwartz | Competitive Swimmer", text:"Check out Audry Schwartz's swimming site", url:"https://audryshwartz.com/"};
+  try { if(navigator.share) await navigator.share(data); else { await navigator.clipboard.writeText(data.url); e.target.textContent="Link copied"; setTimeout(()=>e.target.textContent="Share",2000); } } catch(_){}
+});
 
 // reveal + count-up
 const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.15});
